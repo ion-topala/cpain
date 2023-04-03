@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdbool.h>
 
 struct Company
 {
@@ -13,7 +14,7 @@ struct Drug
     char name[30];
     struct Company company;
     float price;
-} drug;
+} drug, c[100];
 
 void insert(struct Drug *ptr, int n)
 {
@@ -48,6 +49,58 @@ void readInserted(struct Drug *ptr, int n)
     }
 }
 
+int getNextGap(int gap)
+{
+    // Shrink gap by Shrink factor
+    gap = (gap*10)/13;
+  
+    if (gap < 1)
+        return 1;
+    return gap;
+}
+
+void Sortare_bubble(struct Drug *c, int n, struct Drug drug)
+{
+    for (int i = 0; i < n - 1; i++)
+    {
+        for (int j = 0; j < n - 1 - i; j++)
+        {
+            if (c[j].price > c[j+1].price)
+            {
+                drug = c[j];
+                c[j] = c[j + 1];
+                c[j + 1] = drug;
+            }
+        }
+    }
+}
+
+
+void CombSort(struct Drug *c, int n, struct Drug drug)
+{
+    bool swapped = true;
+    int gap = n;
+
+    while (gap != 1 || swapped == true)
+    {
+        gap = getNextGap(gap);
+        swapped = false;
+
+        for (int i = 0; i < n - gap; i++)
+        {
+            if (c[i].price > c[i+gap].price)
+            {
+                drug = c[i];
+                c[i] = c[i+gap];
+                c[i+gap] = drug;
+
+                swapped = true;
+            }
+        }
+    }
+    
+}
+
 void main()
 {
     struct Drug *ptr;
@@ -59,6 +112,7 @@ void main()
     ptr = (struct Drug *)malloc(size * (sizeof(struct Drug)));
 
     insert(ptr, size);
+    CombSort(ptr, size, drug);
     readInserted(ptr, size);
 
     return;
