@@ -52,8 +52,8 @@ void readInserted(struct Drug *ptr, int n)
 int getNextGap(int gap)
 {
     // Shrink gap by Shrink factor
-    gap = (gap*10)/13;
-  
+    gap = (gap * 10) / 13;
+
     if (gap < 1)
         return 1;
     return gap;
@@ -65,7 +65,7 @@ void Sortare_bubble(struct Drug *c, int n, struct Drug drug)
     {
         for (int j = 0; j < n - 1 - i; j++)
         {
-            if (c[j].price > c[j+1].price)
+            if (c[j].price > c[j + 1].price)
             {
                 drug = c[j];
                 c[j] = c[j + 1];
@@ -74,7 +74,6 @@ void Sortare_bubble(struct Drug *c, int n, struct Drug drug)
         }
     }
 }
-
 
 void CombSort(struct Drug *c, int n, struct Drug drug)
 {
@@ -88,17 +87,34 @@ void CombSort(struct Drug *c, int n, struct Drug drug)
 
         for (int i = 0; i < n - gap; i++)
         {
-            if (c[i].price > c[i+gap].price)
+            if (c[i].price > c[i + gap].price)
             {
                 drug = c[i];
-                c[i] = c[i+gap];
-                c[i+gap] = drug;
+                c[i] = c[i + gap];
+                c[i + gap] = drug;
 
                 swapped = true;
             }
         }
     }
-    
+}
+
+void InsertionSort(struct Drug *c, int n, struct Drug drug)
+{
+    int i, j;
+    for (i = 1; i < n; i++)
+    {
+        drug = c[i];
+        j = i - 1;
+
+        while (j >= 0 && c[j].price > drug.price)
+        {
+            c[j + 1] = c[j];
+            j--;
+        }
+
+        c[j + 1] = drug;
+    }
 }
 
 void main()
@@ -112,7 +128,7 @@ void main()
     ptr = (struct Drug *)malloc(size * (sizeof(struct Drug)));
 
     insert(ptr, size);
-    CombSort(ptr, size, drug);
+    InsertionSort(ptr, size, drug);
     readInserted(ptr, size);
 
     return;
